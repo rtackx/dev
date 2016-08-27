@@ -13,6 +13,8 @@ with open(coms_filename, 'r') as file:
 		line = line.replace("\n", "").split()
 		
 		com_id = line.pop(0)
+		if len(line) == 1:
+			continue
 		coms[com_id] = line
 
 herfs = {}
@@ -59,7 +61,8 @@ for film_name in attrs:
 			com_id_film = com_id
 			break
 
-	all_attrs[attrs[film_name]].append(herfs[com_id_film])
+	if com_id_film:
+		all_attrs[attrs[film_name]].append(herfs[com_id_film])
 
 # mean
 all_attrs_mean = {}

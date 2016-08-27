@@ -124,6 +124,8 @@ def herfindahl_all():
 				total += 1
 
 		herf_index[id_com] = 0.0
+		if len(coms[id_com]) < 2:
+			continue
 
 		for genre in genres_com:
 			herf_index[id_com] += pow(1.0 * genres_com[genre] / total, 2)

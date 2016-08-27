@@ -27,6 +27,7 @@ def read_datafile(datafile):
 
 def get_distribution(data):
 	distribution = {}
+	distribution[0.0] = len(data)
 	for (id_node, value) in data.iteritems():
 		if value in distribution:
 			distribution[value] += 1
@@ -54,6 +55,7 @@ def draw(datafile, dictionnary):
 	pylab.gca().yaxis.set_major_formatter(fct_formatter)
 	#pylab.xscale("log")
 	pylab.ylim([0.0, 1.0])
+
 	plot_parameters = dict(linestyle="-", marker="s", markersize=8, linewidth=2.5, color="red")
 
 	data = zip(*sorted(dictionnary.iteritems(), key=operator.itemgetter(0), reverse=False))
