@@ -13,8 +13,8 @@ with open(coms_filename, 'r') as file:
 		line = line.replace("\n", "").split()
 		
 		com_id = line.pop(0)
-		if len(line) == 1:
-			continue
+		'''if len(line) == 1:
+			continue'''
 		coms[com_id] = line
 
 herfs = {}

@@ -11,8 +11,8 @@ with open(com_top_films_file, 'r') as file:
 		line = line.replace("\n", "").split()
 
 		id_com = line.pop(0)
-		if len(line) == 1:
-			continue
+		#if len(line) == 1:
+		#	continue
 		
 		coms[id_com] = line
 
@@ -29,6 +29,11 @@ def herfindahl_multi():
 	herf_index = {}
 
 	for id_com in coms:
+		herf_index[id_com] = 0.0
+
+		if len(coms[id_com]) == 1:
+			continue
+
 		genres_com = {}
 		total = 0
 
@@ -42,10 +47,11 @@ def herfindahl_multi():
 			genres_com[joint_genres] += 1
 			total += 1
 
-		herf_index[id_com] = 0.0
-
 		for joint_genres in genres_com:
-			herf_index[id_com] += pow(1.0 * genres_com[joint_genres] / total, 2)
+			herf_index[id_com] += pow(1.0 * genres_com[joint_genres] / len(coms[id_com]), 2)
+
+		if herf_index[id_com]:
+			herf_index[id_com] /= len(genres_com)
 
 	#print herf_index
 
@@ -59,6 +65,11 @@ def herfindahl_maj():
 	herf_index = {}
 
 	for id_com in coms:
+		herf_index[id_com] = 0.0
+
+		if len(coms[id_com]) == 1:
+			continue
+
 		distrib_genre = {}
 		total = 0
 
@@ -96,10 +107,14 @@ def herfindahl_maj():
 			genres_com[list_genre_max[film]] += 1
 			total += 1
 
-		herf_index[id_com] = 0.0
+		#for genre in genres_com:
+		#	herf_index[id_com] += pow(1.0 * genres_com[genre] / total, 2)
 
 		for genre in genres_com:
-			herf_index[id_com] += pow(1.0 * genres_com[genre] / total, 2)
+			herf_index[id_com] += pow(1.0 * genres_com[genre] / len(coms[id_com]), 2)
+
+		if herf_index[id_com]:
+			herf_index[id_com] /= len(genres_com)
 	
 	file = open("herf_maj.data", 'w')
 	for id_com in herf_index:
@@ -110,6 +125,11 @@ def herfindahl_all():
 	herf_index = {}
 
 	for id_com in coms:
+		herf_index[id_com] = 0.0
+
+		if len(coms[id_com]) == 1:
+			continue
+
 		genres_com = {}
 		total = 0
 
@@ -121,14 +141,13 @@ def herfindahl_all():
 			for genre in films_genres[film]:
 				genres_com.setdefault(genre, 0)
 				genres_com[genre] += 1
-				total += 1
-
-		herf_index[id_com] = 0.0
-		if len(coms[id_com]) < 2:
-			continue
+				total += 1		
 
 		for genre in genres_com:
-			herf_index[id_com] += pow(1.0 * genres_com[genre] / total, 2)
+			herf_index[id_com] += pow(1.0 * genres_com[genre] / len(coms[id_com]), 2)
+
+		if herf_index[id_com]:
+			herf_index[id_com] /= len(genres_com)
 
 	#print herf_index
 

@@ -14,8 +14,6 @@ with open(file_coms, 'r') as file:
 		line = line.replace("\n", "").split()
 
 		com_id = line.pop(0)
-		if len(line) == 1:
-			continue
 
 		coms[com_id] = line
 
