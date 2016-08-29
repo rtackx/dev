@@ -5,6 +5,14 @@ import os, ast, operator, sys, pylab, numpy
 file_coms = sys.argv[1]
 file_attr = sys.argv[2]
 
+attr = {}
+with open(file_attr, 'r') as file:
+	for line in file:
+		line = line.replace("\n", "").split()
+
+		film_name = line.pop(0)
+		attr[film_name] = line
+
 coms = {}
 with open(file_coms, 'r') as file:
 	for line in file:
@@ -13,15 +21,11 @@ with open(file_coms, 'r') as file:
 		com_id = line.pop(0)
 		'''if len(line) == 1:
 			continue'''
-		coms[com_id] = line
 
-attr = {}
-with open(file_attr, 'r') as file:
-	for line in file:
-		line = line.replace("\n", "").split()
-
-		film_name = line.pop(0)
-		attr[film_name] = line
+		coms[com_id] = []
+		for film_name in line:
+			if film_name in attr:
+				coms[com_id].append(film_name)
 
 
 herf_common_teta = {}
@@ -65,14 +69,14 @@ for common_teta in numpy.arange(0.0, 1.0, 0.01):
 
 		''' classic herfindhal value '''
 		
-		'''for att in list_eligible:
-			herf_common_teta[common_teta][id_com] += pow(1.0 * distrib_attr[att] / total_common, 2)'''
-		
 		for att in list_eligible:
+			herf_common_teta[common_teta][id_com] += pow(1.0 * distrib_attr[att] / total_common, 2)
+		
+		'''for att in list_eligible:
 			herf_common_teta[common_teta][id_com] += pow(1.0 * distrib_attr[att] / len(coms[id_com]), 2)
 
 		if herf_common_teta[common_teta][id_com]:
-			herf_common_teta[common_teta][id_com] /= len(list_eligible)
+			herf_common_teta[common_teta][id_com] /= len(list_eligible)'''
 
 		''' herfindhal value with multi attributes '''
 		'''multi_att = {}
