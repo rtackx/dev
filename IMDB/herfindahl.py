@@ -20,8 +20,8 @@ with open(com_top_films_file, 'r') as file:
 		line = line.replace("\n", "").split()
 
 		id_com = line.pop(0)
-		#if len(line) == 1:
-		#	continue
+		if len(line) == 1:
+			continue
 		
 		coms[id_com] = []
 

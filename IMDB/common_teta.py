@@ -133,7 +133,7 @@ for common_teta in numpy.arange(0.0, 1.0, 0.01):
 
 
 list_mean = []
-f = open(file_attr + ".common_teta", 'w')
+f = open(file_attr + "_common_teta", 'w')
 for common_teta in herf_common_teta:
 	mean = numpy.mean(herf_common_teta[common_teta].values())
 	f.write(str(common_teta) + " " + str(mean) + "\n")

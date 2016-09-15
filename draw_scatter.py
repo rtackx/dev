@@ -2,7 +2,15 @@
 
 import matplotlib
 matplotlib.use("Agg")
-import os, ast, operator, sys, pylab, math
+import os, ast, operator, sys, pylab, math, numpy
+
+def to_percent(y, position):
+            s = str(100 * y)
+
+            if pylab.rcParams['text.usetex'] == True:
+                return s + r'$\%$'
+            else:
+                return s + '%'
 
 def load_dico(file):
         dico = {}
@@ -11,7 +19,7 @@ def load_dico(file):
                 for line in file:
                         line = line.replace("\n", "").split()
 
-                        dico[line[0]] = line[1]
+                        dico[line[0]] = float(line[1])
 
         return dico
 
@@ -26,7 +34,7 @@ def draw(datafile, dico_x, dico_y):
         data_x = zip(*sorted(dico_x.iteritems(), key=operator.itemgetter(0), reverse=False))
         data_y = zip(*sorted(dico_y.iteritems(), key=operator.itemgetter(0), reverse=False))
 
-        pylab.plot(data_x[1], data_y[1], **plot_parameters)
+        pylab.scatter(data_x[1], data_y[1])#, **plot_parameters)
 
         figure.savefig(datafile + "_scatter.png")
         pylab.close(figure)
@@ -104,16 +112,55 @@ def draw_avg(datafile, dico_x, dico_y):
         figure.savefig(datafile + "_avg_scatter.png")
         pylab.close(figure)
 
+def draw_hist(list_file):
+        figure = pylab.figure(figsize=(13,10), dpi=80)
+        #pylab.yscale("log")
+        labels = ["Louvain", "Infomap", "GPS"]
+        colors = ["red", "green", "blue"]
+        pylab.xlabel("Average values of Herfindahl index")
+        pylab.ylabel("Percentage of movies")
+
+        fct_formatter = matplotlib.ticker.FuncFormatter(to_percent)
+        pylab.gca().yaxis.set_major_formatter(fct_formatter)
+        #pylab.xscale("log")
+        pylab.ylim([0.0, 1.0])
+
+        i = 0
+        all_values = []
+        weights = []
+        for filename in list_file:
+                list_value = []                
+                with open(filename, 'r') as file:
+                        for line in file:
+                                line = line.replace("\n", "").split()
+
+                                list_value.append(float(line[1]))
+                all_values.append(sorted(list_value))
+                weights.append(numpy.ones_like(list_value)/len(list_value))
+                
+                i += 1
+
+        n, bins, patches = pylab.hist(all_values, normed=0, weights=weights, cumulative=False, color=colors, alpha=0.75, align='mid', bins=20)
+                
+
+        figure.savefig("avg_hist.png")
+        pylab.close(figure)
+        
 
 def main(argv):
-        file_x = argv[0]
-        file_y = argv[1]
-
-        dico_x = load_dico(file_x)
-        dico_y = load_dico(file_y)
-
-        #draw(file_y, dico_x, dico_y)
-        draw_avg(file_y, dico_x, dico_y)
+        if "-f" == argv[0]:
+                file_x = argv[1]
+                file_y = argv[2]
+                dico_x = load_dico(file_x)
+                dico_y = load_dico(file_y)
+                draw(file_y, dico_x, dico_y)
+                #draw_avg(file_y, dico_x, dico_y)
+        elif "-d" == argv[0]:
+                draw_hist(argv[1:])
+        else:
+                print "draw_scatter [-f file_x file_y] [-d list_files_x]"
+        
+        
 
 if __name__  == "__main__":
         main(sys.argv[1:])

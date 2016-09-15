@@ -7,8 +7,8 @@ str_top_nodes = {}
 str_bot_nodes = {}
 
 louvain = False
-bisbm = True
-infomap = False
+bisbm = False
+infomap = True
 
 if bisbm:
 	index = 1
