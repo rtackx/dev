@@ -32,7 +32,7 @@ with open(filename_network, 'r') as file:
 		index_node1 = line[0]
 		index_node2 = line[1]
 
-		f.write(nodes[index_node1] + ' ' + nodes[index_node2] + '\n')
+		f.write(str(nodes[index_node1]) + ' ' + str(nodes[index_node2]) + '\n')
 
 f.close()
 
